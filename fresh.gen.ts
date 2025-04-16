@@ -7,8 +7,9 @@ import * as $_app from "./routes/_app.tsx";
 import * as $api_joke from "./routes/api/joke.ts";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
+import * as $teams_index from "./routes/teams/index.tsx";
 import * as $Counter from "./islands/Counter.tsx";
-import type { Manifest } from "$fresh/server.ts";
+import { type Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
@@ -17,6 +18,7 @@ const manifest = {
     "./routes/api/joke.ts": $api_joke,
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/index.tsx": $index,
+    "./routes/teams/index.tsx": $teams_index,
   },
   islands: {
     "./islands/Counter.tsx": $Counter,
