@@ -9,6 +9,10 @@ export class TeamController {
     return await TeamModel.getById(id);
   }
 
+  static async getTeamByAbbreviation(abbreviation: string): Promise<Team | null> {
+    return await TeamModel.getByAbbreviation(abbreviation);
+  }
+
   static getTeamDisplayName(team: Team): string {
     return `${team.city} ${team.nickname}`;
   }

@@ -8,71 +8,59 @@ export interface Team {
   city: string;
   state: string;
   yearFounded: number;
-}
-
-interface TeamRow {
-  [key: string]: string | number;
-  id: string;
-  full_name: string;
-  abbreviation: string;
-  nickname: string;
-  city: string;
-  state: string;
-  year_founded: number;
+  [key: string]: string | number; // Required for SQLite RowObject constraint
 }
 
 export class TeamModel {
   static async getAll(): Promise<Team[]> {
     const db = getDb();
-    const rows = await db.queryEntries<TeamRow>(`
+    return await db.queryEntries<Team>(`
       SELECT 
         id,
-        full_name,
+        full_name as fullName,
         abbreviation,
         nickname,
         city,
         state,
-        year_founded
+        year_founded as yearFounded
       FROM team
       ORDER BY city, nickname
     `);
-    return rows.map(row => ({
-      id: row.id,
-      fullName: row.full_name,
-      abbreviation: row.abbreviation,
-      nickname: row.nickname,
-      city: row.city,
-      state: row.state,
-      yearFounded: row.year_founded,
-    }));
   }
 
   static async getById(id: string): Promise<Team | null> {
     const db = getDb();
-    const rows = await db.queryEntries<TeamRow>(`
+    const rows = await db.queryEntries<Team>(`
       SELECT 
         id,
-        full_name,
+        full_name as fullName,
         abbreviation,
         nickname,
         city,
         state,
-        year_founded
+        year_founded as yearFounded
       FROM team
       WHERE id = ?
     `, [id]);
     
-    if (rows.length === 0) return null;
+    return rows.length === 0 ? null : rows[0];
+  }
+
+  static async getByAbbreviation(abbreviation: string): Promise<Team | null> {
+    const db = getDb();
+    const rows = await db.queryEntries<Team>(`
+      SELECT 
+        id,
+        full_name as fullName,
+        abbreviation,
+        nickname,
+        city,
+        state,
+        year_founded as yearFounded
+      FROM team
+      WHERE abbreviation = ?
+    `, [abbreviation]);
     
-    const row = rows[0];
-    return {
-      id: row.id,
-      fullName: row.full_name,
-      abbreviation: row.abbreviation,
-      nickname: row.nickname,
-      city: row.city,
-      state: row.state,
-      yearFounded: row.year_founded,
-    };
+    return rows.length === 0 ? null : rows[0];
   }
 }

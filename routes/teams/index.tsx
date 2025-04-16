@@ -15,12 +15,16 @@ export default function TeamsPage({ data: teams }: PageProps<Team[]>) {
       <h1 class="text-2xl font-bold mb-4">NBA Teams</h1>
       <div class="grid grid-cols-1 gap-4">
         {teams.map((team) => (
-          <div key={team.id} class="border p-4 rounded-lg">
-            <h2 class="text-xl font-semibold">{TeamController.getTeamDisplayName(team)}</h2>
+          <a
+            key={team.id}
+            href={`/teams/${team.abbreviation}`}
+            class="block border p-4 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <h2 class="text-xl font-semibold text-blue-600">{TeamController.getTeamDisplayName(team)}</h2>
             <p class="text-gray-600">
               {team.city}, {team.state} • Est. {team.yearFounded}
             </p>
-          </div>
+          </a>
         ))}
       </div>
     </div>
