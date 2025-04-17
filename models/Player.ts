@@ -17,7 +17,7 @@ export interface Player {
 export class PlayerModel {
   static async getAll(): Promise<Player[]> {
     const db = getDb();
-    return await db.queryEntries<Player>(`
+    const players = await db.queryEntries<Player>(`
       SELECT 
         person_id as id,
         first_name as firstName,
@@ -27,17 +27,18 @@ export class PlayerModel {
         jersey,
         height,
         weight,
-        team_id as teamId,
+        CAST(team_id as TEXT) as teamId,
         birthdate
       FROM common_player_info
       WHERE rosterstatus = 'Active'
       ORDER BY CAST(jersey AS INTEGER)
     `);
+    return players;
   }
 
   static async getByTeamId(teamId: string): Promise<Player[]> {
     const db = getDb();
-    return await db.queryEntries<Player>(`
+    const players = await db.queryEntries<Player>(`
       SELECT 
         person_id as id,
         first_name as firstName,
@@ -47,12 +48,13 @@ export class PlayerModel {
         jersey,
         height,
         weight,
-        team_id as teamId,
+        CAST(team_id as TEXT) as teamId,
         birthdate
       FROM common_player_info
       WHERE team_id = ? AND rosterstatus = 'Active'
       ORDER BY CAST(jersey AS INTEGER)
     `, [teamId]);
+    return players;
   }
 
   static async getById(id: string): Promise<Player | null> {
@@ -67,7 +69,7 @@ export class PlayerModel {
         jersey,
         height,
         weight,
-        team_id as teamId,
+        CAST(team_id as TEXT) as teamId,
         birthdate
       FROM common_player_info
       WHERE person_id = ?

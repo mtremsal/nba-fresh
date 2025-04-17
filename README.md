@@ -18,9 +18,8 @@ deno task start
 
 ## TODO
 
-### Improve robustness
+### Improve robustness without exposing PII
 
-* Write a solid test harness for each model, and ensure all tests pass.
 * Use www.synthesized.io to create a masked database that doesn't contain any PII, then check that all the tests still pass.
 
 ### UI improvements
