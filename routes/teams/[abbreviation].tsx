@@ -10,26 +10,53 @@ interface TeamPageData {
   team: Team;
   players: Player[];
   games: Game[];
+  currentSeason: string;
+  prevSeason: string;
+  nextSeason: string;
+  minSeason: string;
+  maxSeason: string;
 }
 
 export const handler: Handlers<TeamPageData | null> = {
-  async GET(_req, ctx) {
+  async GET(req, ctx) {
     const team = await TeamController.getTeamByAbbreviation(
       ctx.params.abbreviation,
     );
     if (!team) {
       return ctx.renderNotFound();
     }
+
+    const url = new URL(req.url);
+    const seasons = await GameController.getSeasons(team.id);
+    const currentSeason = url.searchParams.get("season") || GameController.DEFAULT_SEASON;
+
+    // Sort seasons by year and find the valid range
+    const sortedSeasons = [...seasons].sort((a, b) => 
+      GameController.getSeasonStartYear(b) - GameController.getSeasonStartYear(a)
+    );
+    const minSeason = sortedSeasons[sortedSeasons.length - 1];
+    const maxSeason = sortedSeasons[0];
+
     const [players, games] = await Promise.all([
       PlayerController.getPlayersByTeamId(team.id),
-      GameController.getGamesByTeamId(team.id),
+      GameController.getGamesByTeamId(team.id, currentSeason),
     ]);
-    return ctx.render({ team, players, games });
+    
+    return ctx.render({ 
+      team, 
+      players, 
+      games, 
+      currentSeason,
+      prevSeason: GameController.getPreviousSeason(currentSeason),
+      nextSeason: GameController.getNextSeason(currentSeason),
+      minSeason,
+      maxSeason
+    });
   },
 };
 
 export default function TeamPage(
-  { data: { team, players, games } }: PageProps<TeamPageData>,
+  { data: { team, players, games, currentSeason, prevSeason, nextSeason, minSeason, maxSeason } }: PageProps<TeamPageData>,
 ) {
   return (
     <div class="p-4 mx-auto max-w-screen-xl">
@@ -187,7 +214,35 @@ export default function TeamPage(
         </table>
       </div>
 
-      <h2 class="text-xl font-bold mb-4 mt-8">Games</h2>
+      <div class="flex justify-between items-center mt-8 mb-4">
+        <h2 class="text-xl font-bold">Games</h2>
+        <div class="flex items-center space-x-4">
+          {GameController.getSeasonStartYear(currentSeason) <= GameController.getSeasonStartYear(minSeason) ? (
+            <span class="px-3 py-1 rounded text-gray-400 cursor-not-allowed">&lt;</span>
+          ) : (
+            <a
+              href={`/teams/${team.abbreviation}?season=${prevSeason}`}
+              class="px-3 py-1 rounded text-blue-600 hover:bg-blue-50"
+            >
+              &lt;
+            </a>
+          )}
+          <span class="font-medium">
+            {GameController.formatSeason(currentSeason)}
+          </span>
+          {GameController.getSeasonStartYear(currentSeason) >= GameController.getSeasonStartYear(maxSeason) ? (
+            <span class="px-3 py-1 rounded text-gray-400 cursor-not-allowed">&gt;</span>
+          ) : (
+            <a
+              href={`/teams/${team.abbreviation}?season=${nextSeason}`}
+              class="px-3 py-1 rounded text-blue-600 hover:bg-blue-50"
+            >
+              &gt;
+            </a>
+          )}
+        </div>
+      </div>
+
       <div class="bg-white shadow rounded-lg overflow-hidden">
         <table class="min-w-full">
           <thead class="bg-gray-50">
@@ -196,13 +251,13 @@ export default function TeamPage(
                 Date
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Home Team
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Score
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Location
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
+                Away Team
               </th>
             </tr>
           </thead>
@@ -215,13 +270,13 @@ export default function TeamPage(
                   </a>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
+                  {game.homeTeamName}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap font-medium">
                   {GameController.getGameScore(game)}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  {game.arena}, {game.city}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  {game.status}
+                  {game.visitorTeamName}
                 </td>
               </tr>
             ))}
