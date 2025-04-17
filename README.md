@@ -54,12 +54,8 @@ List of existing tasks:
 
 ### Game page
 
-- Build a Game model based on the following tables: game: 65698 game_info: 58053
-  game_summary: 58110 line_score: 58053
-- Use the Game model to create a Game page that shows overall info from the
-  model, as well as the detailed `play_by_play` if available.
-- Link each Game to both Teams involved.
-- Show a table with all the Games of a Team on its page, after its roster.
+- Improve the Game model with the game_summary and line_score tables.
+- Show the Game's detailed `play_by_play` if available.
 
 ### Various issues
 
