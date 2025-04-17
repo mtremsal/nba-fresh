@@ -8,7 +8,16 @@ export interface Team {
   city: string;
   state: string;
   yearFounded: number;
-  [key: string]: string | number; // Required for SQLite RowObject constraint
+  arena?: string;
+  arenaCapacity?: number;
+  owner?: string;
+  generalManager?: string;
+  headCoach?: string;
+  dLeagueAffiliation?: string;
+  facebook?: string;
+  instagram?: string;
+  twitter?: string;
+  [key: string]: string | number | undefined; // Required for SQLite RowObject constraint
 }
 
 export class TeamModel {
@@ -16,15 +25,25 @@ export class TeamModel {
     const db = getDb();
     return await db.queryEntries<Team>(`
       SELECT 
-        id,
-        full_name as fullName,
-        abbreviation,
-        nickname,
-        city,
-        state,
-        year_founded as yearFounded
-      FROM team
-      ORDER BY city, nickname
+        t.id,
+        t.full_name as fullName,
+        t.abbreviation,
+        t.nickname,
+        t.city,
+        t.state,
+        t.year_founded as yearFounded,
+        td.arena,
+        td.arenacapacity as arenaCapacity,
+        td.owner,
+        td.generalmanager as generalManager,
+        td.headcoach as headCoach,
+        td.dleagueaffiliation as dLeagueAffiliation,
+        td.facebook,
+        td.instagram,
+        td.twitter
+      FROM team t
+      LEFT JOIN team_details td ON t.id = td.team_id
+      ORDER BY t.city, t.nickname
     `);
   }
 
@@ -32,15 +51,25 @@ export class TeamModel {
     const db = getDb();
     const rows = await db.queryEntries<Team>(`
       SELECT 
-        id,
-        full_name as fullName,
-        abbreviation,
-        nickname,
-        city,
-        state,
-        year_founded as yearFounded
-      FROM team
-      WHERE id = ?
+        t.id,
+        t.full_name as fullName,
+        t.abbreviation,
+        t.nickname,
+        t.city,
+        t.state,
+        t.year_founded as yearFounded,
+        td.arena,
+        td.arenacapacity as arenaCapacity,
+        td.owner,
+        td.generalmanager as generalManager,
+        td.headcoach as headCoach,
+        td.dleagueaffiliation as dLeagueAffiliation,
+        td.facebook,
+        td.instagram,
+        td.twitter
+      FROM team t
+      LEFT JOIN team_details td ON t.id = td.team_id
+      WHERE t.id = ?
     `, [id]);
     
     return rows.length === 0 ? null : rows[0];
@@ -50,15 +79,25 @@ export class TeamModel {
     const db = getDb();
     const rows = await db.queryEntries<Team>(`
       SELECT 
-        id,
-        full_name as fullName,
-        abbreviation,
-        nickname,
-        city,
-        state,
-        year_founded as yearFounded
-      FROM team
-      WHERE abbreviation = ?
+        t.id,
+        t.full_name as fullName,
+        t.abbreviation,
+        t.nickname,
+        t.city,
+        t.state,
+        t.year_founded as yearFounded,
+        td.arena,
+        td.arenacapacity as arenaCapacity,
+        td.owner,
+        td.generalmanager as generalManager,
+        td.headcoach as headCoach,
+        td.dleagueaffiliation as dLeagueAffiliation,
+        td.facebook,
+        td.instagram,
+        td.twitter
+      FROM team t
+      LEFT JOIN team_details td ON t.id = td.team_id
+      WHERE t.abbreviation = ?
     `, [abbreviation]);
     
     return rows.length === 0 ? null : rows[0];

@@ -43,7 +43,68 @@ export default function TeamPage({ data }: PageProps<TeamPageData>) {
             <p class="text-gray-600">Founded</p>
             <p class="font-medium">{team.yearFounded}</p>
           </div>
+          {team.arena && (
+            <div>
+              <p class="text-gray-600">Arena</p>
+              <p class="font-medium">{team.arena} {team.arenaCapacity && `(${team.arenaCapacity.toLocaleString()} capacity)`}</p>
+            </div>
+          )}
+          {team.dLeagueAffiliation && (
+            <div>
+              <p class="text-gray-600">G League Affiliation</p>
+              <p class="font-medium">{team.dLeagueAffiliation}</p>
+            </div>
+          )}
         </div>
+
+        {(team.owner || team.generalManager || team.headCoach) && (
+          <div class="mt-4 pt-4 border-t">
+            <p class="text-gray-600 mb-2">Management & Coaching Staff</p>
+            <div class="grid grid-cols-2 gap-4">
+              {team.owner && (
+                <div>
+                  <p class="text-gray-600">Owner</p>
+                  <p class="font-medium">{team.owner}</p>
+                </div>
+              )}
+              {team.generalManager && (
+                <div>
+                  <p class="text-gray-600">General Manager</p>
+                  <p class="font-medium">{team.generalManager}</p>
+                </div>
+              )}
+              {team.headCoach && (
+                <div>
+                  <p class="text-gray-600">Head Coach</p>
+                  <p class="font-medium">{team.headCoach}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {(team.facebook || team.twitter || team.instagram) && (
+          <div class="mt-4 pt-4 border-t">
+            <p class="text-gray-600 mb-2">Social Media</p>
+            <div class="flex gap-4">
+              {team.facebook && (
+                <a href={team.facebook} target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">
+                  Facebook
+                </a>
+              )}
+              {team.twitter && (
+                <a href={team.twitter} target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">
+                  Twitter
+                </a>
+              )}
+              {team.instagram && (
+                <a href={team.instagram} target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">
+                  Instagram
+                </a>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <h2 class="text-xl font-bold mb-4">Roster</h2>
