@@ -21,4 +21,13 @@ export class PlayerController {
     const [feet, inches] = height.split("-");
     return `${feet}'${inches}"`;
   }
+
+  static formatBirthdate(birthdate: string): string {
+    const date = new Date(birthdate);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
 }

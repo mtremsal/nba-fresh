@@ -12,7 +12,7 @@ export const handler: Handlers<Team[]> = {
 export default function TeamsPage({ data: teams }: PageProps<Team[]>) {
   return (
     <div class="p-4 mx-auto max-w-screen-xl">
-      <h1 class="text-2xl font-bold mb-4">NBA Teams</h1>
+      <h1 class="text-2xl font-bold mb-4">NBA 2023-24</h1>
       <div class="grid grid-cols-1 gap-4">
         {teams.map((team) => (
           <a
@@ -20,7 +20,9 @@ export default function TeamsPage({ data: teams }: PageProps<Team[]>) {
             href={`/teams/${team.abbreviation}`}
             class="block border p-4 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            <h2 class="text-xl font-semibold text-blue-600">{TeamController.getTeamDisplayName(team)}</h2>
+            <h2 class="text-xl font-semibold text-blue-600">
+              {TeamController.getTeamDisplayName(team)}
+            </h2>
             <p class="text-gray-600">
               {team.city}, {team.state} • Est. {team.yearFounded}
             </p>

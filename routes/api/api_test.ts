@@ -1,5 +1,5 @@
 import { assertEquals, assertExists } from "jsr:@std/assert";
-import { describe, it, afterAll } from "jsr:@std/testing/bdd";
+import { afterAll, describe, it } from "jsr:@std/testing/bdd";
 import { Team } from "../../models/Team.ts";
 import { Player } from "../../models/Player.ts";
 import { createHandler } from "$fresh/server.ts";
@@ -18,12 +18,12 @@ describe("API Endpoints", () => {
       const req = new Request("http://localhost/api/teams");
       const response = await handler(req);
       assertEquals(response.status, 200);
-      
+
       const data = await response.json();
       assertExists(data);
       assertEquals(Array.isArray(data), true);
       assertEquals(data.length > 0, true);
-      
+
       // Verify team structure
       const team = data[0] as Team;
       assertExists(team.id);
@@ -36,7 +36,7 @@ describe("API Endpoints", () => {
       const req = new Request("http://localhost/api/teams?abbreviation=LAL");
       const response = await handler(req);
       assertEquals(response.status, 200);
-      
+
       const team = await response.json() as Team;
       assertEquals(team.abbreviation, "LAL");
       assertEquals(team.city, "Los Angeles");
@@ -58,12 +58,12 @@ describe("API Endpoints", () => {
       const req = new Request("http://localhost/api/players");
       const response = await handler(req);
       assertEquals(response.status, 200);
-      
+
       const data = await response.json();
       assertExists(data);
       assertEquals(Array.isArray(data), true);
       assertEquals(data.length > 0, true);
-      
+
       // Verify player structure
       const player = data[0] as Player;
       assertExists(player.id);
@@ -75,18 +75,22 @@ describe("API Endpoints", () => {
     it("should get players by team ID", async () => {
       // First get a valid team ID
       const handler = await createHandler(manifest, config);
-      const teamsReq = new Request("http://localhost/api/teams?abbreviation=LAL");
+      const teamsReq = new Request(
+        "http://localhost/api/teams?abbreviation=LAL",
+      );
       const teamsResponse = await handler(teamsReq);
       const team = await teamsResponse.json() as Team;
-      
-      const playersReq = new Request(`http://localhost/api/players?teamId=${team.id}`);
+
+      const playersReq = new Request(
+        `http://localhost/api/players?teamId=${team.id}`,
+      );
       const response = await handler(playersReq);
       assertEquals(response.status, 200);
-      
+
       const players = await response.json() as Player[];
       assertEquals(Array.isArray(players), true);
       assertEquals(players.length > 0, true);
-      assertEquals(players.every(p => p.teamId === team.id), true);
+      assertEquals(players.every((p) => p.teamId === team.id), true);
     });
 
     it("should return 404 for non-existent player", async () => {

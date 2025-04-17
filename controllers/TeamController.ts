@@ -9,7 +9,9 @@ export class TeamController {
     return await TeamModel.getById(id);
   }
 
-  static async getTeamByAbbreviation(abbreviation: string): Promise<Team | null> {
+  static async getTeamByAbbreviation(
+    abbreviation: string,
+  ): Promise<Team | null> {
     return await TeamModel.getByAbbreviation(abbreviation);
   }
 

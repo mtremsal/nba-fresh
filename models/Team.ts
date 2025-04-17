@@ -49,7 +49,8 @@ export class TeamModel {
 
   static async getById(id: string): Promise<Team | null> {
     const db = getDb();
-    const rows = await db.queryEntries<Team>(`
+    const rows = await db.queryEntries<Team>(
+      `
       SELECT 
         t.id,
         t.full_name as fullName,
@@ -70,14 +71,17 @@ export class TeamModel {
       FROM team t
       LEFT JOIN team_details td ON t.id = td.team_id
       WHERE t.id = ?
-    `, [id]);
-    
+    `,
+      [id],
+    );
+
     return rows.length === 0 ? null : rows[0];
   }
 
   static async getByAbbreviation(abbreviation: string): Promise<Team | null> {
     const db = getDb();
-    const rows = await db.queryEntries<Team>(`
+    const rows = await db.queryEntries<Team>(
+      `
       SELECT 
         t.id,
         t.full_name as fullName,
@@ -98,8 +102,10 @@ export class TeamModel {
       FROM team t
       LEFT JOIN team_details td ON t.id = td.team_id
       WHERE t.abbreviation = ?
-    `, [abbreviation]);
-    
+    `,
+      [abbreviation],
+    );
+
     return rows.length === 0 ? null : rows[0];
   }
 }

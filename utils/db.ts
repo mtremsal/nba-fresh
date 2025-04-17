@@ -4,7 +4,8 @@ let db: DB | null = null;
 
 export function getDb(): DB {
   if (!db) {
-    const path = new URL("../data/prod-database.sqlite", import.meta.url).pathname;
+    const path =
+      new URL("../data/prod-database.sqlite", import.meta.url).pathname;
     db = new DB(path);
   }
   return db;

@@ -10,7 +10,7 @@ import * as $index from "./routes/index.tsx";
 import * as $teams_abbreviation_ from "./routes/teams/[abbreviation].tsx";
 import * as $teams_index from "./routes/teams/index.tsx";
 
-import { type Manifest } from "$fresh/server.ts";
+import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {

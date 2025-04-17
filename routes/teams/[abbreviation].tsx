@@ -11,7 +11,9 @@ interface TeamPageData {
 
 export const handler: Handlers<TeamPageData | null> = {
   async GET(_req, ctx) {
-    const team = await TeamController.getTeamByAbbreviation(ctx.params.abbreviation);
+    const team = await TeamController.getTeamByAbbreviation(
+      ctx.params.abbreviation,
+    );
     if (!team) {
       return ctx.renderNotFound();
     }
@@ -20,10 +22,14 @@ export const handler: Handlers<TeamPageData | null> = {
   },
 };
 
-export default function TeamPage({ data: { team, players } }: PageProps<TeamPageData>) {
+export default function TeamPage(
+  { data: { team, players } }: PageProps<TeamPageData>,
+) {
   return (
     <div class="p-4 mx-auto max-w-screen-xl">
-      <h1 class="text-2xl font-bold mb-4">{TeamController.getTeamDisplayName(team)}</h1>
+      <h1 class="text-2xl font-bold mb-4">
+        {TeamController.getTeamDisplayName(team)}
+      </h1>
       <div class="bg-white shadow rounded-lg p-6 mb-6">
         <div class="grid grid-cols-3 gap-4">
           <div>
@@ -45,7 +51,10 @@ export default function TeamPage({ data: { team, players } }: PageProps<TeamPage
           {team.arena && (
             <div>
               <p class="text-gray-600">Arena</p>
-              <p class="font-medium">{team.arena} {team.arenaCapacity && `(${team.arenaCapacity.toLocaleString()} capacity)`}</p>
+              <p class="font-medium">
+                {team.arena} {team.arenaCapacity &&
+                  `(${team.arenaCapacity.toLocaleString()} capacity)`}
+              </p>
             </div>
           )}
           {team.dLeagueAffiliation && (
@@ -86,17 +95,32 @@ export default function TeamPage({ data: { team, players } }: PageProps<TeamPage
             <p class="text-gray-600 mb-2">Social Media</p>
             <div class="flex gap-4">
               {team.facebook && (
-                <a href={team.facebook} target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">
+                <a
+                  href={team.facebook}
+                  target="_blank"
+                  rel="noopener"
+                  class="text-blue-600 hover:text-blue-800"
+                >
                   Facebook
                 </a>
               )}
               {team.twitter && (
-                <a href={team.twitter} target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">
+                <a
+                  href={team.twitter}
+                  target="_blank"
+                  rel="noopener"
+                  class="text-blue-600 hover:text-blue-800"
+                >
                   Twitter
                 </a>
               )}
               {team.instagram && (
-                <a href={team.instagram} target="_blank" rel="noopener" class="text-blue-600 hover:text-blue-800">
+                <a
+                  href={team.instagram}
+                  target="_blank"
+                  rel="noopener"
+                  class="text-blue-600 hover:text-blue-800"
+                >
                   Instagram
                 </a>
               )}
@@ -110,12 +134,24 @@ export default function TeamPage({ data: { team, players } }: PageProps<TeamPage
         <table class="min-w-full">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Player</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Number</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Height</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Weight</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Birthdate</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Player
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Position
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Number
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Height
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Weight
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Birthdate
+              </th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
@@ -124,11 +160,21 @@ export default function TeamPage({ data: { team, players } }: PageProps<TeamPage
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="font-medium text-gray-900">{player.fullName}</div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-500">{player.position}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-500">{player.jersey}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-500">{PlayerController.formatPlayerHeight(player.height)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-500">{player.weight} lbs</td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-500">{new Date(player.birthdate).toLocaleDateString()}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-500">
+                  {player.position}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-500">
+                  {player.jersey}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-500">
+                  {PlayerController.formatPlayerHeight(player.height)}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-500">
+                  {player.weight} lbs
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-500">
+                  {PlayerController.formatBirthdate(player.birthdate)}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -136,7 +182,9 @@ export default function TeamPage({ data: { team, players } }: PageProps<TeamPage
       </div>
 
       <div class="mt-6">
-        <a href="/teams" class="text-blue-600 hover:text-blue-800">← Back to Teams</a>
+        <a href="/teams" class="text-blue-600 hover:text-blue-800">
+          ← Back to Teams
+        </a>
       </div>
     </div>
   );

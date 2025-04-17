@@ -5,7 +5,7 @@ export default function App({ Component }: PageProps) {
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, 1.0" />
-        <title>NBA Teams</title>
+        <title>NBA 2023-24</title>
       </head>
       <body>
         <Component />

@@ -12,7 +12,9 @@ export default function Error404() {
           <p class="my-4">
             The page you were looking for doesn't exist.
           </p>
-          <a href="/teams" class="text-blue-600 hover:text-blue-800">Go back to Teams</a>
+          <a href="/teams" class="text-blue-600 hover:text-blue-800">
+            Go back to Teams
+          </a>
         </div>
       </div>
     </>
