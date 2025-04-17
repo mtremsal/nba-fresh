@@ -10,6 +10,7 @@ export interface Player {
   height: string;
   weight: string;
   teamId: string;
+  birthdate: string;
   [key: string]: string | number; // Required for SQLite RowObject constraint
 }
 
@@ -26,10 +27,11 @@ export class PlayerModel {
         jersey,
         height,
         weight,
-        team_id as teamId
+        team_id as teamId,
+        birthdate
       FROM common_player_info
       WHERE rosterstatus = 'Active'
-      ORDER BY last_name, first_name
+      ORDER BY CAST(jersey AS INTEGER)
     `);
   }
 
@@ -45,10 +47,11 @@ export class PlayerModel {
         jersey,
         height,
         weight,
-        team_id as teamId
+        team_id as teamId,
+        birthdate
       FROM common_player_info
       WHERE team_id = ? AND rosterstatus = 'Active'
-      ORDER BY last_name, first_name
+      ORDER BY CAST(jersey AS INTEGER)
     `, [teamId]);
   }
 
@@ -64,7 +67,8 @@ export class PlayerModel {
         jersey,
         height,
         weight,
-        team_id as teamId
+        team_id as teamId,
+        birthdate
       FROM common_player_info
       WHERE person_id = ?
     `, [id]);

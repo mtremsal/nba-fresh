@@ -1,16 +1,21 @@
-# Fresh project
+# NBA-Fresh
 
-Your new Fresh project is ready to go. You can follow the Fresh "Getting
-Started" guide here: https://fresh.deno.dev/docs/getting-started
+This demo project relies on na NBA database.
 
-### Usage
+## Architecture
 
-Make sure to install Deno: https://deno.land/manual/getting_started/installation
+* runtime: [Deno](https://docs.deno.com/runtime/)
+* frontend: [Fresh](https://fresh.deno.dev/docs/getting-started)
+* Database: [sqlite](https://sqlite.org/) via the [Deno SQLite Module](https://deno.land/x/sqlite@v3.9.1)
 
-Then start the project:
+## Usage
+
+Start the project:
 
 ```
 deno task start
 ```
 
-This will watch the project directory and restart as necessary.
+## TODO
+
+* Figure out why the `team_info_common` table is empty.

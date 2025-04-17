@@ -20,13 +20,12 @@ export const handler: Handlers<TeamPageData | null> = {
   },
 };
 
-export default function TeamPage({ data }: PageProps<TeamPageData>) {
-  const { team, players } = data;
+export default function TeamPage({ data: { team, players } }: PageProps<TeamPageData>) {
   return (
-    <div class="p-4 mx-auto max-w-screen-md">
+    <div class="p-4 mx-auto max-w-screen-xl">
       <h1 class="text-2xl font-bold mb-4">{TeamController.getTeamDisplayName(team)}</h1>
       <div class="bg-white shadow rounded-lg p-6 mb-6">
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-3 gap-4">
           <div>
             <p class="text-gray-600">Full Name</p>
             <p class="font-medium">{team.fullName}</p>
@@ -59,8 +58,7 @@ export default function TeamPage({ data }: PageProps<TeamPageData>) {
 
         {(team.owner || team.generalManager || team.headCoach) && (
           <div class="mt-4 pt-4 border-t">
-            <p class="text-gray-600 mb-2">Management & Coaching Staff</p>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-3 gap-4">
               {team.owner && (
                 <div>
                   <p class="text-gray-600">Owner</p>
@@ -117,6 +115,7 @@ export default function TeamPage({ data }: PageProps<TeamPageData>) {
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Number</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Height</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Weight</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Birthdate</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
@@ -129,6 +128,7 @@ export default function TeamPage({ data }: PageProps<TeamPageData>) {
                 <td class="px-6 py-4 whitespace-nowrap text-gray-500">{player.jersey}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-500">{PlayerController.formatPlayerHeight(player.height)}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-500">{player.weight} lbs</td>
+                <td class="px-6 py-4 whitespace-nowrap text-gray-500">{new Date(player.birthdate).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
