@@ -1,12 +1,15 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { TeamController } from "../../controllers/TeamController.ts";
 import { PlayerController } from "../../controllers/PlayerController.ts";
+import { GameController } from "../../controllers/GameController.ts";
 import { Team } from "../../models/Team.ts";
 import { Player } from "../../models/Player.ts";
+import { Game } from "../../models/Game.ts";
 
 interface TeamPageData {
   team: Team;
   players: Player[];
+  games: Game[];
 }
 
 export const handler: Handlers<TeamPageData | null> = {
@@ -17,13 +20,16 @@ export const handler: Handlers<TeamPageData | null> = {
     if (!team) {
       return ctx.renderNotFound();
     }
-    const players = await PlayerController.getPlayersByTeamId(team.id);
-    return ctx.render({ team, players });
+    const [players, games] = await Promise.all([
+      PlayerController.getPlayersByTeamId(team.id),
+      GameController.getGamesByTeamId(team.id),
+    ]);
+    return ctx.render({ team, players, games });
   },
 };
 
 export default function TeamPage(
-  { data: { team, players } }: PageProps<TeamPageData>,
+  { data: { team, players, games } }: PageProps<TeamPageData>,
 ) {
   return (
     <div class="p-4 mx-auto max-w-screen-xl">
@@ -174,6 +180,48 @@ export default function TeamPage(
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-500">
                   {PlayerController.formatBirthdate(player.birthdate)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="text-xl font-bold mb-4 mt-8">Games</h2>
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <table class="min-w-full">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Date
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Score
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Location
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {games.map((game) => (
+              <tr key={game.id} class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <a href={`/games/${game.id}`} class="text-blue-600 hover:text-blue-800">
+                    {GameController.formatGameDate(game.gameDate)}
+                  </a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  {GameController.getGameScore(game)}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  {game.arena}, {game.city}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  {game.status}
                 </td>
               </tr>
             ))}

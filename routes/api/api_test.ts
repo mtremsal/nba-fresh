@@ -2,6 +2,7 @@ import { assertEquals, assertExists } from "jsr:@std/assert";
 import { afterAll, describe, it } from "jsr:@std/testing/bdd";
 import { Team } from "../../models/Team.ts";
 import { Player } from "../../models/Player.ts";
+import { Game } from "../../models/Game.ts";
 import { createHandler } from "$fresh/server.ts";
 import manifest from "../../fresh.gen.ts";
 import config from "../../fresh.config.ts";
@@ -96,6 +97,58 @@ describe("API Endpoints", () => {
     it("should return 404 for non-existent player", async () => {
       const handler = await createHandler(manifest, config);
       const req = new Request("http://localhost/api/players?id=nonexistent");
+      const response = await handler(req);
+      assertEquals(response.status, 404);
+      await response.json();
+    });
+  });
+
+  describe("Games API", () => {
+    it("should get all games", async () => {
+      const handler = await createHandler(manifest, config);
+      const req = new Request("http://localhost/api/games");
+      const response = await handler(req);
+      assertEquals(response.status, 200);
+
+      const data = await response.json();
+      assertExists(data);
+      assertEquals(Array.isArray(data), true);
+      assertEquals(data.length > 0, true);
+
+      // Verify game structure
+      const game = data[0] as Game;
+      assertExists(game.id);
+      assertExists(game.gameDate);
+      assertExists(game.homeTeamId);
+      assertExists(game.visitorTeamId);
+    });
+
+    it("should get games by team ID", async () => {
+      // First get a valid team ID
+      const handler = await createHandler(manifest, config);
+      const teamsReq = new Request("http://localhost/api/teams?abbreviation=LAL");
+      const teamsResponse = await handler(teamsReq);
+      const team = await teamsResponse.json() as Team;
+
+      const gamesReq = new Request(
+        `http://localhost/api/games?teamId=${team.id}`,
+      );
+      const response = await handler(gamesReq);
+      assertEquals(response.status, 200);
+
+      const games = await response.json() as Game[];
+      assertEquals(Array.isArray(games), true);
+      assertEquals(games.length > 0, true);
+      // Check that at least one game has the team as either home or visitor
+      assertEquals(
+        games.some((g) => g.homeTeamId === team.id || g.visitorTeamId === team.id),
+        true,
+      );
+    });
+
+    it("should return 404 for non-existent game", async () => {
+      const handler = await createHandler(manifest, config);
+      const req = new Request("http://localhost/api/games?id=nonexistent");
       const response = await handler(req);
       assertEquals(response.status, 404);
       await response.json();

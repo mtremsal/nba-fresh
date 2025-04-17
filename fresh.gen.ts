@@ -4,8 +4,10 @@
 
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
+import * as $api_games from "./routes/api/games.ts";
 import * as $api_players from "./routes/api/players.ts";
 import * as $api_teams from "./routes/api/teams.ts";
+import * as $games_id_ from "./routes/games/[id].tsx";
 import * as $index from "./routes/index.tsx";
 import * as $teams_abbreviation_ from "./routes/teams/[abbreviation].tsx";
 import * as $teams_index from "./routes/teams/index.tsx";
@@ -16,8 +18,10 @@ const manifest = {
   routes: {
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
+    "./routes/api/games.ts": $api_games,
     "./routes/api/players.ts": $api_players,
     "./routes/api/teams.ts": $api_teams,
+    "./routes/games/[id].tsx": $games_id_,
     "./routes/index.tsx": $index,
     "./routes/teams/[abbreviation].tsx": $teams_abbreviation_,
     "./routes/teams/index.tsx": $teams_index,
