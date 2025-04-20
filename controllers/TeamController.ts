@@ -81,6 +81,10 @@ export class TeamController {
     return `https://cdn.nba.com/logos/nba/${teamId}/global/L/logo.svg`;
   }
 
+  static getTeamConferenceDivision(abbreviation: string) {
+    return teamDivisionMapping[abbreviation];
+  }
+
   // New method to get teams grouped by division
   static async getAllTeamsGrouped(): Promise<TeamsByConference> {
     const allTeams = await TeamModel.getAll(); // Fetch the flat list first
