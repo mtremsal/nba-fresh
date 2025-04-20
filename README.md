@@ -64,3 +64,35 @@ List of existing tasks:
   Antonio Spurs WAS|Washington Wizards CHA|Charlotte Hornets
 - Figure out what to do with the `other_stats` table.
 - Why is "Kristaps Porziņģis" (BOS) shown as playing number 6 instead of 8?
+
+# NBA Fresh UI Improvement TODO List
+
+Based on review and comparison with nba.com:
+
+- [ ] **Visual Appeal & Branding:**
+  - [ ] Add team logos to Teams list page (`/teams`)
+  - [ ] Add team logos to Team detail page (`/teams/[abbreviation]`)
+  - [ ] Add team logos to Game detail page (`/games/[id]`)
+  - [ ] Incorporate team colors on team pages
+  - [ ] Add player headshots to roster table on team page
+
+- [ ] **Navigation:**
+  - [ ] Implement a persistent navigation bar (`_app.tsx`)
+  - [ ] Add breadcrumbs for navigation context
+
+- [ ] **Team Page (`/teams/[abbreviation].tsx`):**
+  - [ ] Improve layout (e.g., multi-column)
+  - [ ] Make roster table sortable
+  - [ ] Enhance game list presentation (logos, home/away indication, win/loss)
+
+- [ ] **Game Page (`/games/[id].tsx`):**
+  - [ ] Improve score display prominence (larger font, logos)
+  - [ ] Ensure clear display of game context (date, season, etc.)
+  - [ ] Add box score data (if available)
+
+- [ ] **Teams List Page (`/teams/index.tsx`):**
+  - [ ] Implement a grid layout with team logos
+
+- [ ] **General Styling:**
+  - [ ] Refine Tailwind usage for more polished components (buttons, cards, tables)
+  - [ ] Add hover effects and clear visual cues for interactive elements
