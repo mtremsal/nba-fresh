@@ -9,7 +9,10 @@ export class GameController {
     return await GameModel.getById(id);
   }
 
-  static async getGamesByTeamId(teamId: string, season?: string): Promise<Game[]> {
+  static async getGamesByTeamId(
+    teamId: string,
+    season?: string,
+  ): Promise<Game[]> {
     return await GameModel.getByTeamId(teamId, season);
   }
 
@@ -21,7 +24,7 @@ export class GameController {
     return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
-      day: "numeric"
+      day: "numeric",
     });
   }
 

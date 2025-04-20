@@ -63,7 +63,7 @@ export class GameModel {
       LEFT JOIN game_info gi ON g.game_id = gi.game_id
       WHERE g.game_id = ?
     `,
-      [id]
+      [id],
     );
 
     return rows.length === 0 ? null : rows[0];
@@ -91,35 +91,35 @@ export class GameModel {
       LEFT JOIN game_info gi ON g.game_id = gi.game_id
       WHERE (g.team_id_home = ? OR g.team_id_away = ?)
     `;
-    
+
     const params = [teamId, teamId];
-    
+
     if (season) {
       query += ` AND g.season_id = ?`;
       params.push(season);
     }
-    
+
     query += ` ORDER BY g.game_date DESC`;
-    
+
     return await db.queryEntries<Game>(query, params);
   }
-  
+
   static async getSeasons(teamId?: string): Promise<string[]> {
     const db = getDb();
     let query = `
       SELECT DISTINCT season_id as season
       FROM game
     `;
-    
+
     const params: string[] = [];
     if (teamId) {
       query += ` WHERE team_id_home = ? OR team_id_away = ?`;
       params.push(teamId, teamId);
     }
-    
+
     query += ` ORDER BY season_id DESC`;
-    
+
     const rows = await db.queryEntries<{ season: string }>(query, params);
-    return rows.map(row => row.season);
+    return rows.map((row) => row.season);
   }
 }

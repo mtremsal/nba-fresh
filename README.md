@@ -41,11 +41,6 @@ List of existing tasks:
 - Use www.synthesized.io to create a masked database that doesn't contain any
   PII, then check that all the tests still pass.
 
-### UI improvements
-
-- Display teams in 6 divisions of 5 teams each.
-- Write a script to scrape team logos from https://www.nba.com/teams
-
 ### Player page
 
 - Create a dedicated player page to show additional information, and link to it

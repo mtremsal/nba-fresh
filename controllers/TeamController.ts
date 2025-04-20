@@ -9,7 +9,9 @@ export interface TeamsByConference {
   [conference: string]: TeamsByDivision;
 }
 
-const teamDivisionMapping: { [abbreviation: string]: { conference: string; division: string } } = {
+const teamDivisionMapping: {
+  [abbreviation: string]: { conference: string; division: string };
+} = {
   // Eastern Conference
   // Atlantic
   "BOS": { conference: "Eastern", division: "Atlantic" },
@@ -112,7 +114,9 @@ export class TeamController {
         groupedTeams[mapping.conference][mapping.division].push(team);
       } else {
         // Handle teams not found in the mapping (optional: log or place in an 'Unknown' group)
-        console.warn(`Team with abbreviation ${team.abbreviation} not found in division mapping.`);
+        console.warn(
+          `Team with abbreviation ${team.abbreviation} not found in division mapping.`,
+        );
         // Example: Add to an 'Unknown' group
         // if (!groupedTeams["Unknown"]) groupedTeams["Unknown"] = { "Unknown": [] };
         // groupedTeams["Unknown"]["Unknown"].push(team);

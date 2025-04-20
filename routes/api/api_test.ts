@@ -46,9 +46,13 @@ describe("API Endpoints", () => {
       if (team.arena) assertEquals(typeof team.arena, "string");
       if (team.arenaCapacity) assertEquals(typeof team.arenaCapacity, "number");
       if (team.owner) assertEquals(typeof team.owner, "string");
-      if (team.generalManager) assertEquals(typeof team.generalManager, "string");
+      if (team.generalManager) {
+        assertEquals(typeof team.generalManager, "string");
+      }
       if (team.headCoach) assertEquals(typeof team.headCoach, "string");
-      if (team.dLeagueAffiliation) assertEquals(typeof team.dLeagueAffiliation, "string");
+      if (team.dLeagueAffiliation) {
+        assertEquals(typeof team.dLeagueAffiliation, "string");
+      }
     });
 
     it("should get team by abbreviation", async () => {
@@ -68,7 +72,9 @@ describe("API Endpoints", () => {
 
     it("should get team by ID", async () => {
       const handler = await createHandler(manifest, config);
-      const teamByAbbrReq = new Request(`${BASE_URL}/api/teams?abbreviation=LAL`);
+      const teamByAbbrReq = new Request(
+        `${BASE_URL}/api/teams?abbreviation=LAL`,
+      );
       const teamByAbbrResp = await handler(teamByAbbrReq);
       const teamData = await teamByAbbrResp.json() as Team;
       const teamId = teamData.id;
@@ -97,7 +103,9 @@ describe("API Endpoints", () => {
 
       assertNotEquals(teamLAL.id, teamBOS.id);
 
-      const req = new Request(`${BASE_URL}/api/teams?abbreviation=LAL&id=${teamBOS.id}`);
+      const req = new Request(
+        `${BASE_URL}/api/teams?abbreviation=LAL&id=${teamBOS.id}`,
+      );
       const response = await handler(req);
       assertEquals(response.status, 200);
 
@@ -262,7 +270,9 @@ describe("API Endpoints", () => {
       assertEquals(Array.isArray(games), true);
       assertEquals(games.length > 0, true);
       assertEquals(
-        games.some((g) => g.homeTeamId === team.id || g.visitorTeamId === team.id),
+        games.some((g) =>
+          g.homeTeamId === team.id || g.visitorTeamId === team.id
+        ),
         true,
       );
 

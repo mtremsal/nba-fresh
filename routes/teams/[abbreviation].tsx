@@ -29,11 +29,13 @@ export const handler: Handlers<TeamPageData | null> = {
 
     const url = new URL(req.url);
     const seasons = await GameController.getSeasons(team.id);
-    const currentSeason = url.searchParams.get("season") || GameController.DEFAULT_SEASON;
+    const currentSeason = url.searchParams.get("season") ||
+      GameController.DEFAULT_SEASON;
 
     // Sort seasons by year and find the valid range
-    const sortedSeasons = [...seasons].sort((a, b) => 
-      GameController.getSeasonStartYear(b) - GameController.getSeasonStartYear(a)
+    const sortedSeasons = [...seasons].sort((a, b) =>
+      GameController.getSeasonStartYear(b) -
+      GameController.getSeasonStartYear(a)
     );
     const minSeason = sortedSeasons[sortedSeasons.length - 1];
     const maxSeason = sortedSeasons[0];
@@ -47,35 +49,47 @@ export const handler: Handlers<TeamPageData | null> = {
       { label: "Teams", href: "/teams" },
       { label: TeamController.getTeamDisplayName(team) },
     ];
-    
-    return ctx.render({ 
-      team, 
-      players, 
-      games, 
+
+    return ctx.render({
+      team,
+      players,
+      games,
       currentSeason,
       prevSeason: GameController.getPreviousSeason(currentSeason),
       nextSeason: GameController.getNextSeason(currentSeason),
       minSeason,
       maxSeason,
-      breadcrumbItems
+      breadcrumbItems,
     });
   },
 };
 
 export default function TeamPage(
-  { data: { team, players, games, currentSeason, prevSeason, nextSeason, minSeason, maxSeason } }: PageProps<TeamPageData>,
+  {
+    data: {
+      team,
+      players,
+      games,
+      currentSeason,
+      prevSeason,
+      nextSeason,
+      minSeason,
+      maxSeason,
+    },
+  }: PageProps<TeamPageData>,
 ) {
   return (
     <div class="min-h-screen bg-gray-50">
       <div class="p-4 mx-auto max-w-screen-xl">
         {/* Added Team Logo next to the name */}
         <div class="flex items-center mb-4">
-          <img 
+          <img
             src={TeamController.getTeamLogoUrl(team.id)}
             alt={`${TeamController.getTeamDisplayName(team)} logo`}
             class="h-16 w-16 mr-4 object-contain" // Slightly larger logo
           />
-          <h1 class="text-3xl font-bold"> {/* Increased heading size */}
+          <h1 class="text-3xl font-bold">
+            {/* Increased heading size */}
             {TeamController.getTeamDisplayName(team)}
           </h1>
         </div>
@@ -208,7 +222,9 @@ export default function TeamPage(
               {players.map((player) => (
                 <tr key={player.id} class="hover:bg-gray-50">
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="font-medium text-gray-900">{player.fullName}</div>
+                    <div class="font-medium text-gray-900">
+                      {player.fullName}
+                    </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-gray-500">
                     {player.position}
@@ -234,29 +250,39 @@ export default function TeamPage(
         <div class="flex justify-between items-center mt-8 mb-4">
           <h2 class="text-xl font-bold">Games</h2>
           <div class="flex items-center space-x-4">
-            {GameController.getSeasonStartYear(currentSeason) <= GameController.getSeasonStartYear(minSeason) ? (
-              <span class="px-3 py-1 rounded text-gray-400 cursor-not-allowed">&lt;</span>
-            ) : (
-              <a
-                href={`/teams/${team.abbreviation}?season=${prevSeason}`}
-                class="px-3 py-1 rounded text-blue-600 hover:bg-blue-50"
-              >
-                &lt;
-              </a>
-            )}
+            {GameController.getSeasonStartYear(currentSeason) <=
+                GameController.getSeasonStartYear(minSeason)
+              ? (
+                <span class="px-3 py-1 rounded text-gray-400 cursor-not-allowed">
+                  &lt;
+                </span>
+              )
+              : (
+                <a
+                  href={`/teams/${team.abbreviation}?season=${prevSeason}`}
+                  class="px-3 py-1 rounded text-blue-600 hover:bg-blue-50"
+                >
+                  &lt;
+                </a>
+              )}
             <span class="font-medium">
               {GameController.formatSeason(currentSeason)}
             </span>
-            {GameController.getSeasonStartYear(currentSeason) >= GameController.getSeasonStartYear(maxSeason) ? (
-              <span class="px-3 py-1 rounded text-gray-400 cursor-not-allowed">&gt;</span>
-            ) : (
-              <a
-                href={`/teams/${team.abbreviation}?season=${nextSeason}`}
-                class="px-3 py-1 rounded text-blue-600 hover:bg-blue-50"
-              >
-                &gt;
-              </a>
-            )}
+            {GameController.getSeasonStartYear(currentSeason) >=
+                GameController.getSeasonStartYear(maxSeason)
+              ? (
+                <span class="px-3 py-1 rounded text-gray-400 cursor-not-allowed">
+                  &gt;
+                </span>
+              )
+              : (
+                <a
+                  href={`/teams/${team.abbreviation}?season=${nextSeason}`}
+                  class="px-3 py-1 rounded text-blue-600 hover:bg-blue-50"
+                >
+                  &gt;
+                </a>
+              )}
           </div>
         </div>
 
@@ -268,7 +294,8 @@ export default function TeamPage(
                   Date
                 </th>
                 {/* Added Logo column headers */}
-                <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"></th> 
+                <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Home Team
                 </th>
@@ -276,7 +303,8 @@ export default function TeamPage(
                   Score
                 </th>
                 {/* Added Logo column headers */}
-                <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                </th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Away Team
                 </th>
@@ -286,13 +314,16 @@ export default function TeamPage(
               {games.map((game) => (
                 <tr key={game.id} class="hover:bg-gray-50">
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <a href={`/games/${game.id}`} class="text-blue-600 hover:text-blue-800">
+                    <a
+                      href={`/games/${game.id}`}
+                      class="text-blue-600 hover:text-blue-800"
+                    >
                       {GameController.formatGameDate(game.gameDate)}
                     </a>
                   </td>
                   {/* Added Home Team Logo */}
                   <td class="px-2 py-4 whitespace-nowrap text-center">
-                    <img 
+                    <img
                       src={TeamController.getTeamLogoUrl(game.homeTeamId)}
                       alt={`${game.homeTeamName} logo`}
                       class="h-6 w-6 mx-auto object-contain"
@@ -306,7 +337,7 @@ export default function TeamPage(
                   </td>
                   {/* Added Visitor Team Logo */}
                   <td class="px-2 py-4 whitespace-nowrap text-center">
-                    <img 
+                    <img
                       src={TeamController.getTeamLogoUrl(game.visitorTeamId)}
                       alt={`${game.visitorTeamName} logo`}
                       class="h-6 w-6 mx-auto object-contain"
