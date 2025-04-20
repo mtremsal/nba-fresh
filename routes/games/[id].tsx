@@ -53,15 +53,29 @@ export default function GamePage(
       </div>
       
       <div class="bg-white shadow rounded-lg p-6 mb-6">
-        <div class="flex justify-center items-center text-4xl font-bold tracking 1px space-x-4">
-          <div class="flex items-center">
-            <span class="w-20 text-right">{homeTeam.abbreviation}</span>
-            <span class="w-16 text-right ml-2">{game.homeTeamScore}</span>
+        <div class="flex justify-around items-center text-center">
+          <div class="flex flex-col items-center w-1/3">
+            <img 
+              src={TeamController.getTeamLogoUrl(homeTeam.id)}
+              alt={`${TeamController.getTeamDisplayName(homeTeam)} logo`}
+              class="h-20 w-20 mb-2 object-contain"
+            />
+            <a href={`/teams/${homeTeam.abbreviation}`} class="text-xl font-semibold text-blue-700 hover:text-blue-900">
+              {TeamController.getTeamDisplayName(homeTeam)}
+            </a>
+            <span class="text-5xl font-bold mt-2">{game.homeTeamScore}</span>
           </div>
-          <span class="mx-4">-</span>
-          <div class="flex items-center">
-            <span class="w-16 text-left">{game.visitorTeamScore}</span>
-            <span class="w-20 text-left ml-2">{visitorTeam.abbreviation}</span>
+          <div class="text-2xl font-light text-gray-500">VS</div>
+          <div class="flex flex-col items-center w-1/3">
+            <img 
+              src={TeamController.getTeamLogoUrl(visitorTeam.id)}
+              alt={`${TeamController.getTeamDisplayName(visitorTeam)} logo`}
+              class="h-20 w-20 mb-2 object-contain"
+            />
+            <a href={`/teams/${visitorTeam.abbreviation}`} class="text-xl font-semibold text-blue-700 hover:text-blue-900">
+              {TeamController.getTeamDisplayName(visitorTeam)}
+            </a>
+            <span class="text-5xl font-bold mt-2">{game.visitorTeamScore}</span>
           </div>
         </div>
       </div>

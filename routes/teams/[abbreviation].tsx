@@ -60,9 +60,18 @@ export default function TeamPage(
 ) {
   return (
     <div class="p-4 mx-auto max-w-screen-xl">
-      <h1 class="text-2xl font-bold mb-4">
-        {TeamController.getTeamDisplayName(team)}
-      </h1>
+      {/* Added Team Logo next to the name */}
+      <div class="flex items-center mb-4">
+        <img 
+          src={TeamController.getTeamLogoUrl(team.id)}
+          alt={`${TeamController.getTeamDisplayName(team)} logo`}
+          class="h-16 w-16 mr-4 object-contain" // Slightly larger logo
+        />
+        <h1 class="text-3xl font-bold"> {/* Increased heading size */}
+          {TeamController.getTeamDisplayName(team)}
+        </h1>
+      </div>
+
       <div class="bg-white shadow rounded-lg p-6 mb-6">
         <div class="grid grid-cols-3 gap-4">
           <div>
@@ -250,12 +259,16 @@ export default function TeamPage(
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Date
               </th>
+              {/* Added Logo column headers */}
+              <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"></th> 
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Home Team
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Score
               </th>
+              {/* Added Logo column headers */}
+              <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Away Team
               </th>
@@ -269,11 +282,27 @@ export default function TeamPage(
                     {GameController.formatGameDate(game.gameDate)}
                   </a>
                 </td>
+                {/* Added Home Team Logo */}
+                <td class="px-2 py-4 whitespace-nowrap text-center">
+                  <img 
+                    src={TeamController.getTeamLogoUrl(game.homeTeamId)}
+                    alt={`${game.homeTeamName} logo`}
+                    class="h-6 w-6 mx-auto object-contain"
+                  />
+                </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   {game.homeTeamName}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap font-medium">
                   {GameController.getGameScore(game)}
+                </td>
+                {/* Added Visitor Team Logo */}
+                <td class="px-2 py-4 whitespace-nowrap text-center">
+                  <img 
+                    src={TeamController.getTeamLogoUrl(game.visitorTeamId)}
+                    alt={`${game.visitorTeamName} logo`}
+                    class="h-6 w-6 mx-auto object-contain"
+                  />
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   {game.visitorTeamName}
