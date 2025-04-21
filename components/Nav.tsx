@@ -12,7 +12,8 @@ export default function Nav({ breadcrumbItems = [] }: NavProps) {
         <div class="flex h-14 items-center justify-start">
           {/* Group Title and Links together */}
           <div class="flex items-center">
-            <div class="flex-shrink-0 text-black mr-6"> {/* Changed text-white to text-black for visibility on white bg */}
+            <div class="flex-shrink-0 text-black mr-6">
+              {/* Changed text-white to text-black for visibility on white bg */}
               <a href="/" class="font-semibold text-xl tracking-tight">
                 NBA 2022-23
               </a>
@@ -41,7 +42,8 @@ export default function Nav({ breadcrumbItems = [] }: NavProps) {
 
           {/* Push Breadcrumbs to the right */}
           {breadcrumbItems.length > 0 && (
-            <div class="flex items-center ml-auto"> {/* Added ml-auto */}
+            <div class="flex items-center ml-auto">
+              {/* Added ml-auto */}
               <Breadcrumb items={breadcrumbItems} />
             </div>
           )}

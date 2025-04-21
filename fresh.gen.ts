@@ -11,7 +11,7 @@ import * as $games_id_ from "./routes/games/[id].tsx";
 import * as $index from "./routes/index.tsx";
 import * as $teams_abbreviation_ from "./routes/teams/[abbreviation].tsx";
 import * as $teams_index from "./routes/teams/index.tsx";
-
+import * as $PlayByPlayTable from "./islands/PlayByPlayTable.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -26,7 +26,9 @@ const manifest = {
     "./routes/teams/[abbreviation].tsx": $teams_abbreviation_,
     "./routes/teams/index.tsx": $teams_index,
   },
-  islands: {},
+  islands: {
+    "./islands/PlayByPlayTable.tsx": $PlayByPlayTable,
+  },
   baseUrl: import.meta.url,
 } satisfies Manifest;
 

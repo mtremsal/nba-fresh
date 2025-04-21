@@ -3,7 +3,7 @@ import { GameController } from "../../controllers/GameController.ts";
 import { TeamController } from "../../controllers/TeamController.ts";
 import { Game, PlayByPlay } from "../../models/Game.ts";
 import { Team } from "../../models/Team.ts";
-import { ComponentChild } from "preact";
+import PlayByPlayTable from "../../islands/PlayByPlayTable.tsx"; // Import the Island
 
 interface GamePageData {
   game: Game;
@@ -24,7 +24,7 @@ export const handler: Handlers<GamePageData | null> = {
     const [homeTeam, visitorTeam, playByPlay] = await Promise.all([
       TeamController.getTeamById(game.homeTeamId),
       TeamController.getTeamById(game.visitorTeamId),
-      GameController.getPlayByPlay(gameId),
+      GameController.getPlayByPlay(gameId), // Fetch raw play-by-play
     ]);
 
     if (!homeTeam || !visitorTeam) {
@@ -44,13 +44,17 @@ export const handler: Handlers<GamePageData | null> = {
       game,
       homeTeam,
       visitorTeam,
-      playByPlay,
+      playByPlay, // Pass raw play-by-play data
       breadcrumbItems,
     });
   },
 };
 
-function renderScoreTable(game: Game, homeTeamData: Team, visitorTeamData: Team) {
+function renderScoreTable(
+  game: Game,
+  homeTeamData: Team,
+  visitorTeamData: Team,
+) {
   const quarters = ["Q1", "Q2", "Q3", "Q4"];
   const overtimes: string[] = [];
 
@@ -71,49 +75,96 @@ function renderScoreTable(game: Game, homeTeamData: Team, visitorTeamData: Team)
       <table class="min-w-full bg-white shadow rounded-lg">
         <thead>
           <tr class="bg-gray-100">
-            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Team
+            </th>
             {periods.map((period) => (
-              <th key={period} class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{period}</th>
+              <th
+                key={period}
+                class="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                {period}
+              </th>
             ))}
-            <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider font-bold">Total</th>
+            <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider font-bold">
+              Total
+            </th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
           {/* Home Team Row (First) */}
           <tr>
             {/* Display Home Team Name */}
-            <td class="px-4 py-2 whitespace-nowrap"><a href={`/teams/${homeTeamData.abbreviation}`} class="text-blue-600 hover:text-blue-800">{TeamController.getTeamDisplayName(homeTeamData)}</a></td>
+            <td class="px-4 py-2 whitespace-nowrap">
+              <a
+                href={`/teams/${homeTeamData.abbreviation}`}
+                class="text-blue-600 hover:text-blue-800"
+              >
+                {TeamController.getTeamDisplayName(homeTeamData)}
+              </a>
+            </td>
             {periods.map((period) => {
-              const homeScore = game[`pts${period.replace('Q', 'Qtr')}Home`]; // Get Home Score
-              const awayScore = game[`pts${period.replace('Q', 'Qtr')}Away`];
-              const isHomeHigher = (homeScore ?? -Infinity) > (awayScore ?? -Infinity);
+              const homeScore = game[`pts${period.replace("Q", "Qtr")}Home`]; // Get Home Score
+              const awayScore = game[`pts${period.replace("Q", "Qtr")}Away`];
+              const isHomeHigher =
+                (homeScore ?? -Infinity) > (awayScore ?? -Infinity);
               return (
                 // Display Home Score
-                <td key={period} class={`px-2 py-2 text-center whitespace-nowrap ${isHomeHigher ? 'font-bold' : ''}`}>
-                  {homeScore ?? '-'}
+                <td
+                  key={period}
+                  class={`px-2 py-2 text-center whitespace-nowrap ${
+                    isHomeHigher ? "font-bold" : ""
+                  }`}
+                >
+                  {homeScore ?? "-"}
                 </td>
               );
             })}
             {/* Display Home Total */}
-            <td class={`px-3 py-2 text-right whitespace-nowrap ${homeWon ? 'font-bold' : ''}`}>{game.homeTeamScore}</td>
+            <td
+              class={`px-3 py-2 text-right whitespace-nowrap ${
+                homeWon ? "font-bold" : ""
+              }`}
+            >
+              {game.homeTeamScore}
+            </td>
           </tr>
           {/* Visitor Team Row (Second) */}
           <tr>
             {/* Display Visitor Team Name */}
-            <td class="px-4 py-2 whitespace-nowrap"><a href={`/teams/${visitorTeamData.abbreviation}`} class="text-blue-600 hover:text-blue-800">{TeamController.getTeamDisplayName(visitorTeamData)}</a></td>
+            <td class="px-4 py-2 whitespace-nowrap">
+              <a
+                href={`/teams/${visitorTeamData.abbreviation}`}
+                class="text-blue-600 hover:text-blue-800"
+              >
+                {TeamController.getTeamDisplayName(visitorTeamData)}
+              </a>
+            </td>
             {periods.map((period) => {
-              const homeScore = game[`pts${period.replace('Q', 'Qtr')}Home`];
-              const awayScore = game[`pts${period.replace('Q', 'Qtr')}Away`]; // Get Away Score
-              const isAwayHigher = (awayScore ?? -Infinity) > (homeScore ?? -Infinity);
+              const homeScore = game[`pts${period.replace("Q", "Qtr")}Home`];
+              const awayScore = game[`pts${period.replace("Q", "Qtr")}Away`]; // Get Away Score
+              const isAwayHigher =
+                (awayScore ?? -Infinity) > (homeScore ?? -Infinity);
               return (
                 // Display Away Score
-                <td key={period} class={`px-2 py-2 text-center whitespace-nowrap ${isAwayHigher ? 'font-bold' : ''}`}>
-                  {awayScore ?? '-'}
+                <td
+                  key={period}
+                  class={`px-2 py-2 text-center whitespace-nowrap ${
+                    isAwayHigher ? "font-bold" : ""
+                  }`}
+                >
+                  {awayScore ?? "-"}
                 </td>
               );
             })}
             {/* Display Visitor Total */}
-            <td class={`px-3 py-2 text-right whitespace-nowrap ${visitorWon ? 'font-bold' : ''}`}>{game.visitorTeamScore}</td>
+            <td
+              class={`px-3 py-2 text-right whitespace-nowrap ${
+                visitorWon ? "font-bold" : ""
+              }`}
+            >
+              {game.visitorTeamScore}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -121,52 +172,10 @@ function renderScoreTable(game: Game, homeTeamData: Team, visitorTeamData: Team)
   );
 }
 
-// Helper function to link player names in descriptions
-function linkifyDescription(description: string | undefined | null, play: PlayByPlay): string { // Return type changed to string
-  if (!description) {
-    return description || "N/A";
-  }
-
-  // No need to process players or create links anymore
-  return description; 
-}
-
-function renderPlayByPlay(playByPlay: PlayByPlay[]) {
-  if (!playByPlay || playByPlay.length === 0) {
-    return <p>Play-by-play data not available for this game.</p>;
-  }
-
-  return (
-    <div class="mt-8">
-      <h2 class="text-xl font-semibold mb-4">Play-by-Play</h2>
-      <div class="overflow-x-auto">
-        <table class="min-w-full bg-white shadow rounded-lg">
-          <thead>
-            <tr class="bg-gray-100">
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Period</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-200">
-            {playByPlay.map((play) => (
-              <tr key={play.eventNum}>
-                <td class="px-4 py-2 whitespace-nowrap">{play.period}</td>
-                <td class="px-4 py-2 whitespace-nowrap">{play.pcTimeString}</td>
-                <td class="px-4 py-2 whitespace-nowrap">{play.score || "-"}</td>
-                <td class="px-4 py-2">{linkifyDescription(play.homeDescription || play.visitorDescription || play.neutralDescription, play)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
 export default function GamePage(
-  { data: { game, homeTeam, visitorTeam, playByPlay } }: PageProps<GamePageData>,
+  { data: { game, homeTeam, visitorTeam, playByPlay } }: PageProps<
+    GamePageData
+  >,
 ) {
   const season = `${game.season.slice(-4)}-${
     (parseInt(game.season.slice(-4)) + 1).toString().slice(-2)
@@ -177,7 +186,8 @@ export default function GamePage(
       <div class="p-4 mx-auto max-w-screen-xl">
         {/* Keep metadata line */}
         <div class="mb-4 text-center text-gray-600">
-          {season} • {GameController.formatGameDate(game.gameDate)} • {game.city}
+          {season} • {GameController.formatGameDate(game.gameDate)} •{" "}
+          {game.city}
           {game.attendance &&
             ` • ${game.attendance.toLocaleString()} attendance`}
         </div>
@@ -225,15 +235,8 @@ export default function GamePage(
           {renderScoreTable(game, homeTeam, visitorTeam)}
         </div>
 
-        {/* PlayByPlay Table */}
-        {renderPlayByPlay(playByPlay)}
-
-        {/* Back Link */}
-        <div class="mt-6">
-          <a href="/teams" class="text-blue-600 hover:text-blue-800">
-            ← Back to Teams
-          </a>
-        </div>
+        {/* PlayByPlay Table - Now using the Island */}
+        <PlayByPlayTable playByPlay={playByPlay} />
       </div>
     </div>
   );
