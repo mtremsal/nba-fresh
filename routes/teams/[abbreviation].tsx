@@ -70,11 +70,6 @@ export default function TeamPage(
       team,
       players,
       games,
-      currentSeason,
-      prevSeason,
-      nextSeason,
-      minSeason,
-      maxSeason,
     },
   }: PageProps<TeamPageData>,
 ) {
@@ -249,41 +244,7 @@ export default function TeamPage(
 
         <div class="flex justify-between items-center mt-8 mb-4">
           <h2 class="text-xl font-bold">Games</h2>
-          <div class="flex items-center space-x-4">
-            {GameController.getSeasonStartYear(currentSeason) <=
-                GameController.getSeasonStartYear(minSeason)
-              ? (
-                <span class="px-3 py-1 rounded text-gray-400 cursor-not-allowed">
-                  &lt;
-                </span>
-              )
-              : (
-                <a
-                  href={`/teams/${team.abbreviation}?season=${prevSeason}`}
-                  class="px-3 py-1 rounded text-blue-600 hover:bg-blue-50"
-                >
-                  &lt;
-                </a>
-              )}
-            <span class="font-medium">
-              {GameController.formatSeason(currentSeason)}
-            </span>
-            {GameController.getSeasonStartYear(currentSeason) >=
-                GameController.getSeasonStartYear(maxSeason)
-              ? (
-                <span class="px-3 py-1 rounded text-gray-400 cursor-not-allowed">
-                  &gt;
-                </span>
-              )
-              : (
-                <a
-                  href={`/teams/${team.abbreviation}?season=${nextSeason}`}
-                  class="px-3 py-1 rounded text-blue-600 hover:bg-blue-50"
-                >
-                  &gt;
-                </a>
-              )}
-          </div>
+          {/* Season navigation removed as per request */}
         </div>
 
         <div class="bg-white shadow rounded-lg overflow-hidden">

@@ -32,9 +32,10 @@ export default function TeamsPage(
   return (
     <div class="min-h-screen bg-gray-50 px-4 py-8 md:px-6 md:py-12">
       <div class="mx-auto max-w-7xl">
-        <h1 class="text-3xl font-bold mb-8 text-center text-gray-900">
-          NBA Teams
-        </h1>
+        {/* Remove the h1 title as it's now in the Nav bar */}
+        {/* <h1 class="text-3xl font-bold mb-8 text-center text-gray-900">
+          NBA 2022-23
+        </h1> */}
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {displayOrder.map((conference) => (
