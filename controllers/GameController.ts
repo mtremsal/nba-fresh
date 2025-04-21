@@ -1,4 +1,4 @@
-import { Game, GameModel } from "../models/Game.ts";
+import { Game, GameModel, PlayByPlay } from "../models/Game.ts";
 
 export class GameController {
   static async getAllGames(): Promise<Game[]> {
@@ -18,6 +18,10 @@ export class GameController {
 
   static async getSeasons(teamId?: string): Promise<string[]> {
     return await GameModel.getSeasons(teamId);
+  }
+
+  static async getPlayByPlay(gameId: string): Promise<PlayByPlay[]> {
+    return await GameModel.getPlayByPlay(gameId);
   }
 
   static formatGameDate(date: string): string {
